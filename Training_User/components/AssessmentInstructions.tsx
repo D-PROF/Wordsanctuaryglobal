@@ -1,6 +1,13 @@
+"use client"
+
 import Link from "next/link"
 
-export default function Assessment() {
+interface AssessmentInstructionsProps {
+  title: string
+  onStartAssessment: () => void
+}
+
+export function AssessmentInstructions({ title, onStartAssessment }: AssessmentInstructionsProps) {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex">
@@ -27,8 +34,8 @@ export default function Assessment() {
               <span className="hidden md:block">Dashboard</span>
             </Link>
 
-            <Link href="/assessment" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100">
-              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-600">
+            <Link href="/assessment" className="flex items-center px-4 py-3 text-purple-600 bg-purple-100">
+              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-200 text-purple-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -78,33 +85,39 @@ export default function Assessment() {
         {/* Main content */}
         <div className="ml-16 flex-1 md:ml-64">
           <div className="p-4 md:p-8">
-            <div className="rounded-lg bg-white p-6 shadow-md">
-              <h1 className="mb-4 text-2xl font-bold text-gray-800">Assessments</h1>
+            <div className="rounded-lg bg-white p-6 shadow-md max-w-2xl mx-auto">
+              <h1 className="text-xl font-bold text-purple-600 text-center mb-8">{title}</h1>
 
-              <div className="rounded-lg bg-purple-50 p-8 text-center">
-                <div className="mb-4 flex justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-16 w-16 text-purple-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="mb-2 text-xl font-semibold text-gray-800">
-                  Your Assessment Questions Will Be Uploaded Here
-                </h2>
-                <p className="text-gray-600">
-                  Check back soon for new assessments. When tests, exams, and assignments are available, they will
-                  appear in this section.
-                </p>
+              <div className="mb-8">
+                <h2 className="text-lg font-semibold mb-4">Instructions</h2>
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    This is the assessment for the topic {title}
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    Do not minimize the screen as the system will automatically log out and submit if the screen is
+                    minimized.
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    In case of a glitch, kindly reach out to the appropriate leadership for rectification
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-2">•</span>
+                    Once the time elapses, the system automatically submit your answers.
+                  </li>
+                </ul>
+              </div>
+
+              <div className="text-center">
+                <button
+                  onClick={onStartAssessment}
+                  className="bg-purple-600 text-white px-8 py-3 rounded-md hover:bg-purple-700 font-semibold"
+                >
+                  Attempt Question Now!!!
+                </button>
               </div>
             </div>
           </div>

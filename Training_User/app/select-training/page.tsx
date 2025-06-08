@@ -6,6 +6,8 @@ export default function SelectTraining() {
   const router = useRouter()
 
   const handleFormSelection = (userType: string) => {
+    // Store the user's role in localStorage for assessment tracking
+    localStorage.setItem("userRole", userType)
     router.push(`/interview-questions?role=${userType}`)
   }
 

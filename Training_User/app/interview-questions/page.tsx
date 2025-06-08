@@ -186,6 +186,12 @@ export default function InterviewQuestions() {
     }
   }, [formData["inRelationship"], formData["hasChallenges"]])
 
+  // Add this useEffect after the existing useEffects
+  useEffect(() => {
+    // Store the user's role in localStorage for assessment tracking
+    localStorage.setItem("userRole", role)
+  }, [role])
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex">
@@ -212,7 +218,7 @@ export default function InterviewQuestions() {
               <span className="hidden md:block">Dashboard</span>
             </Link>
 
-            <Link href="/assignment" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100">
+            <Link href="/assessment" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100">
               <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -229,27 +235,7 @@ export default function InterviewQuestions() {
                   />
                 </svg>
               </div>
-              <span className="hidden md:block">Assignment</span>
-            </Link>
-
-            <Link href="/test-exam" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100">
-              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </div>
-              <span className="hidden md:block">Test/Exam</span>
+              <span className="hidden md:block">Assessment</span>
             </Link>
 
             <Link href="/settings" className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100">
@@ -382,544 +368,2359 @@ export default function InterviewQuestions() {
               <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   {/* Regular form fields for worker, executive-assistant, assistant-hod roles */}
-                  {role !== "hod" &&
-                    role !== "minister" &&
-                    role !== "assistant-hod" &&
-                    role !== "executive-assistant" && (
-                      <>
-                        {role === "worker" && (
-                          <>
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                1. Full Name <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="fullName"
-                                className={`w-full rounded-md border ${
-                                  formErrors["fullName"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["fullName"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
-                              )}
-                            </div>
+                  {role !== "hod" && role !== "minister" && role !== "executive-assistant" && (
+                    <>
+                      {role === "worker" && (
+                        <>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              1. Full Name <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="fullName"
+                              className={`w-full rounded-md border ${
+                                formErrors["fullName"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["fullName"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                2. Gender <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="gender"
-                                className={`w-full rounded-md border ${
-                                  formErrors["gender"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["gender"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              2. Gender <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="gender"
+                              className={`w-full rounded-md border ${
+                                formErrors["gender"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["gender"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                3. Telegram phone number/ username <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="telegram"
-                                className={`w-full rounded-md border ${
-                                  formErrors["telegram"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["telegram"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              3. Telegram phone number/ username <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="telegram"
+                              className={`w-full rounded-md border ${
+                                formErrors["telegram"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["telegram"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                4. Installation <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="installation"
-                                className={`w-full rounded-md border ${
-                                  formErrors["installation"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["installation"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              4. Installation <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="installation"
+                              className={`w-full rounded-md border ${
+                                formErrors["installation"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["installation"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                5. Address <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="address"
-                                className={`w-full rounded-md border ${
-                                  formErrors["address"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["address"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              5. Address <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="address"
+                              className={`w-full rounded-md border ${
+                                formErrors["address"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["address"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                6. Single or married? <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="maritalStatus"
-                                className={`w-full rounded-md border ${
-                                  formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["maritalStatus"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              6. Single or married? <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="maritalStatus"
+                              className={`w-full rounded-md border ${
+                                formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["maritalStatus"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                7. Occupation <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="occupation"
-                                className={`w-full rounded-md border ${
-                                  formErrors["occupation"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["occupation"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              7. Occupation <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="occupation"
+                              className={`w-full rounded-md border ${
+                                formErrors["occupation"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["occupation"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                8. How long have you been a worker? <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="workerDuration"
-                                className={`w-full rounded-md border ${
-                                  formErrors["workerDuration"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["workerDuration"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["workerDuration"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              8. How long have you been a worker? <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="workerDuration"
+                              className={`w-full rounded-md border ${
+                                formErrors["workerDuration"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["workerDuration"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["workerDuration"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                9. Department <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="department"
-                                className={`w-full rounded-md border ${
-                                  formErrors["department"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["department"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["department"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              9. Department <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="department"
+                              className={`w-full rounded-md border ${
+                                formErrors["department"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["department"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["department"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                10. Dues status <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="duesStatus"
-                                className={`w-full rounded-md border ${
-                                  formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["duesStatus"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              10. Dues status <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="duesStatus"
+                              className={`w-full rounded-md border ${
+                                formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["duesStatus"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                11. How has being a worker influenced you? <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="workerInfluence"
-                                className={`w-full rounded-md border ${
-                                  formErrors["workerInfluence"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["workerInfluence"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["workerInfluence"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              11. How has being a worker influenced you? <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="workerInfluence"
+                              className={`w-full rounded-md border ${
+                                formErrors["workerInfluence"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["workerInfluence"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["workerInfluence"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                12. What has changed in your life since you joined the church{" "}
-                                <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="lifeChanges"
-                                className={`w-full rounded-md border ${
-                                  formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["lifeChanges"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              12. What has changed in your life since you joined the church{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="lifeChanges"
+                              className={`w-full rounded-md border ${
+                                formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["lifeChanges"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                13. Number of life class topics/ name of life class teacher/ what is your consistency in
-                                Life Class <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="lifeClass"
-                                className={`w-full rounded-md border ${
-                                  formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["lifeClass"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              13. Number of life class topics/ name of life class teacher/ what is your consistency in
+                              Life Class <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="lifeClass"
+                              className={`w-full rounded-md border ${
+                                formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["lifeClass"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="bornAgain"
-                                className={`w-full rounded-md border ${
-                                  formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["bornAgain"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="bornAgain"
+                              className={`w-full rounded-md border ${
+                                formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["bornAgain"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                15. How many souls have you brought to the church this year{" "}
-                                <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="soulsWon"
-                                className={`w-full rounded-md border ${
-                                  formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["soulsWon"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              15. How many souls have you brought to the church this year{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="soulsWon"
+                              className={`w-full rounded-md border ${
+                                formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["soulsWon"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                16. Who is your mentor/ what is your consistency in Mentoring{" "}
-                                <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="mentorConsistency"
-                                className={`w-full rounded-md border ${
-                                  formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["mentorConsistency"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["mentorConsistency"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              16. Who is your mentor/ what is your consistency in Mentoring{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="mentorConsistency"
+                              className={`w-full rounded-md border ${
+                                formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["mentorConsistency"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["mentorConsistency"]}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                17. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="wordSanctuaryMeaning"
-                                className={`w-full rounded-md border ${
-                                  formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["wordSanctuaryMeaning"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["wordSanctuaryMeaning"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              17. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="wordSanctuaryMeaning"
+                              className={`w-full rounded-md border ${
+                                formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["wordSanctuaryMeaning"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["wordSanctuaryMeaning"]}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                18. What is your future in Word Sanctuary <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="futureInWordSanctuary"
-                                className={`w-full rounded-md border ${
-                                  formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["futureInWordSanctuary"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["futureInWordSanctuary"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              18. What is your future in Word Sanctuary <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="futureInWordSanctuary"
+                              className={`w-full rounded-md border ${
+                                formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["futureInWordSanctuary"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["futureInWordSanctuary"]}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                19. Are you in a relationship? <span className="text-red-500">*</span>
-                              </label>
-                              <select
-                                name="inRelationship"
-                                className={`w-full rounded-md border ${
-                                  formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              >
-                                <option value="">Select an option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              {formErrors["inRelationship"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["inRelationship"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              19. Are you in a relationship? <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                              name="inRelationship"
+                              className={`w-full rounded-md border ${
+                                formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select an option</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                            {formErrors["inRelationship"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                20. With who/how long{" "}
-                                {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
-                              </label>
-                              <input
-                                type="text"
-                                name="relationshipDetails"
-                                className={`w-full rounded-md border ${
-                                  formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required={formData["inRelationship"] === "yes"}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["relationshipDetails"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["relationshipDetails"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              20. With who/how long{" "}
+                              {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
+                            </label>
+                            <input
+                              type="text"
+                              name="relationshipDetails"
+                              className={`w-full rounded-md border ${
+                                formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required={formData["inRelationship"] === "yes"}
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["relationshipDetails"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["relationshipDetails"]}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                21. When did you join the church <span className="text-red-500">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="joinDate"
-                                className={`w-full rounded-md border ${
-                                  formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              />
-                              {formErrors["joinDate"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              21. When did you join the church <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="joinDate"
+                              className={`w-full rounded-md border ${
+                                formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            />
+                            {formErrors["joinDate"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                22. Are you ready for this training? <span className="text-red-500">*</span>
-                              </label>
-                              <select
-                                name="readyForTraining"
-                                className={`w-full rounded-md border ${
-                                  formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              >
-                                <option value="">Select an option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              {formErrors["readyForTraining"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["readyForTraining"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              22. Are you ready for this training? <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                              name="readyForTraining"
+                              className={`w-full rounded-md border ${
+                                formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select an option</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                            {formErrors["readyForTraining"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["readyForTraining"]}
+                              </p>
+                            )}
+                          </div>
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                23. Observations on things to improve in your: <span className="text-red-500">*</span>
-                              </label>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                a. Department <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="departmentImprovements"
-                                className={`w-full rounded-md border ${
-                                  formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none mb-2`}
-                                rows={2}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["departmentImprovements"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["departmentImprovements"]}
-                                </p>
-                              )}
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              24. How has the executives&apos; Forum being a blessing to your installation?{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="forumBlessing"
+                              className={`w-full rounded-md border ${
+                                formErrors["forumBlessing"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["forumBlessing"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumBlessing"]}</p>
+                            )}
+                          </div>
 
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                b. Church <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="churchImprovements"
-                                className={`w-full rounded-md border ${
-                                  formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={2}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["churchImprovements"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["churchImprovements"]}
-                                </p>
-                              )}
-                            </div>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              25. Observations on things to improve in your: <span className="text-red-500">*</span>
+                            </label>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              1. Department <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="departmentImprovements"
+                              className={`w-full rounded-md border ${
+                                formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none mb-2`}
+                              rows={2}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["departmentImprovements"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["departmentImprovements"]}
+                              </p>
+                            )}
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                24. How can you be of help to move your department/installation forward?{" "}
-                                <span className="text-red-500">*</span>
-                              </label>
-                              <textarea
-                                name="helpMovingForward"
-                                className={`w-full rounded-md border ${
-                                  formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["helpMovingForward"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["helpMovingForward"]}
-                                </p>
-                              )}
-                            </div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              2. Forum <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="forumImprovements"
+                              className={`w-full rounded-md border ${
+                                formErrors["forumImprovements"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none mb-2`}
+                              rows={2}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["forumImprovements"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["forumImprovements"]}
+                              </p>
+                            )}
 
-                            <div>
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                25. Do you have any challenges you are facing presently?{" "}
-                                <span className="text-red-500">*</span>
-                              </label>
-                              <select
-                                name="hasChallenges"
-                                className={`mb-3 w-full rounded-md border ${
-                                  formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                required
-                                onChange={handleInputChange}
-                              >
-                                <option value="">Select an option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                              </select>
-                              {formErrors["hasChallenges"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
-                              )}
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              3. Church <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="churchImprovements"
+                              className={`w-full rounded-md border ${
+                                formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={2}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["churchImprovements"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["churchImprovements"]}
+                              </p>
+                            )}
+                          </div>
 
-                              <label className="mb-1 block text-sm font-medium text-gray-700">
-                                If so, are you open to sharing them?{" "}
-                                {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
-                              </label>
-                              <textarea
-                                name="challengesDetails"
-                                className={`w-full rounded-md border ${
-                                  formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
-                                } p-2 ${focusColor} focus:outline-none`}
-                                rows={3}
-                                required={formData["hasChallenges"] === "yes"}
-                                onChange={handleInputChange}
-                              ></textarea>
-                              {formErrors["challengesDetails"] && (
-                                <p className="mt-1 text-xs text-red-500 error-message">
-                                  {formErrors["challengesDetails"]}
-                                </p>
-                              )}
-                            </div>
-                          </>
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              26. How can you be of help to move your department/installation forward?{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              name="helpMovingForward"
+                              className={`w-full rounded-md border ${
+                                formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["helpMovingForward"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["helpMovingForward"]}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              27. Do you have any challenges you are facing presently?{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                              name="hasChallenges"
+                              className={`mb-3 w-full rounded-md border ${
+                                formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              required
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select an option</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                            {formErrors["hasChallenges"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
+                            )}
+
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                              If so, are you open to sharing them?{" "}
+                              {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
+                            </label>
+                            <textarea
+                              name="challengesDetails"
+                              className={`w-full rounded-md border ${
+                                formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
+                              } p-2 ${focusColor} focus:outline-none`}
+                              rows={3}
+                              required={formData["hasChallenges"] === "yes"}
+                              onChange={handleInputChange}
+                            ></textarea>
+                            {formErrors["challengesDetails"] && (
+                              <p className="mt-1 text-xs text-red-500 error-message">
+                                {formErrors["challengesDetails"]}
+                              </p>
+                            )}
+                          </div>
+                        </>
+                      )}
+
+                      {/* REMOVE THIS SECTION */}
+                    </>
+                  )}
+
+                  {role === "assistant-hod" && (
+                    <>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          1. Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="fullName"
+                          className={`w-full rounded-md border ${
+                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["fullName"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          2. Gender <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="gender"
+                          className={`w-full rounded-md border ${
+                            formErrors["gender"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["gender"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          3. Telegram phone number/ username <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="telegram"
+                          className={`w-full rounded-md border ${
+                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["telegram"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          4. Installation <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="installation"
+                          className={`w-full rounded-md border ${
+                            formErrors["installation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["installation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          5. Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="address"
+                          className={`w-full rounded-md border ${
+                            formErrors["address"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["address"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          6. Single or married? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="maritalStatus"
+                          className={`w-full rounded-md border ${
+                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["maritalStatus"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          7. Occupation <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="occupation"
+                          className={`w-full rounded-md border ${
+                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["occupation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          8. Leadership Position (how long) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="leadershipPosition"
+                          className={`w-full rounded-md border ${
+                            formErrors["leadershipPosition"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["leadershipPosition"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["leadershipPosition"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          9. Department (with previous departments) <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="departmentWithPrevious"
+                          className={`w-full rounded-md border ${
+                            formErrors["departmentWithPrevious"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["departmentWithPrevious"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["departmentWithPrevious"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          10. Dues status <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="duesStatus"
+                          className={`w-full rounded-md border ${
+                            formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["duesStatus"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          11. How has this position influenced you? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="positionInfluence"
+                          className={`w-full rounded-md border ${
+                            formErrors["positionInfluence"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["positionInfluence"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["positionInfluence"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          12. What has changed in your life since you joined the church{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeChanges"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeChanges"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          13. Number of life class topics/ name of life class teacher/ what is your consistency in Life
+                          Class <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeClass"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeClass"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="bornAgain"
+                          className={`w-full rounded-md border ${
+                            formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["bornAgain"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          15. How many souls have you brought to the church this year{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="soulsWon"
+                          className={`w-full rounded-md border ${
+                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["soulsWon"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          16. How many life class students do you have? Mention three{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeClassStudents"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeClassStudents"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          17. Who is your mentor/ what is your consistency in Mentoring{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="mentorConsistency"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["mentorConsistency"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorConsistency"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          18. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="wordSanctuaryMeaning"
+                          className={`w-full rounded-md border ${
+                            formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["wordSanctuaryMeaning"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["wordSanctuaryMeaning"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          19. What is your future in Word Sanctuary <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="futureInWordSanctuary"
+                          className={`w-full rounded-md border ${
+                            formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["futureInWordSanctuary"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["futureInWordSanctuary"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          20. Are you in a relationship? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="inRelationship"
+                          className={`w-full rounded-md border ${
+                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["inRelationship"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          21. With who/how long{" "}
+                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <input
+                          type="text"
+                          name="relationshipDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required={formData["inRelationship"] === "yes"}
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["relationshipDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          22. When did you join the church <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="joinDate"
+                          className={`w-full rounded-md border ${
+                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["joinDate"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          23. Are you ready for this training? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="readyForTraining"
+                          className={`w-full rounded-md border ${
+                            formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["readyForTraining"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["readyForTraining"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          24. How has the Assistant HODs Forum been a blessing to your installation?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="assistantHodForumBlessing"
+                          className={`w-full rounded-md border ${
+                            formErrors["assistantHodForumBlessing"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["assistantHodForumBlessing"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["assistantHodForumBlessing"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          25. Observations on things to improve in your: <span className="text-red-500">*</span>
+                        </label>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          1. Department <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="departmentImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none mb-2`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["departmentImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["departmentImprovements"]}
+                          </p>
                         )}
 
-                        {/* REMOVE THIS SECTION */}
-                      </>
-                    )}
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          2. Forum <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="forumImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["forumImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none mb-2`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["forumImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumImprovements"]}</p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          3. Church <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="churchImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["churchImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["churchImprovements"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          26. How can you be of help to move your department/installation forward?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="helpMovingForward"
+                          className={`w-full rounded-md border ${
+                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["helpMovingForward"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          27. Do you have any challenges you are facing presently?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="hasChallenges"
+                          className={`mb-3 w-full rounded-md border ${
+                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["hasChallenges"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          If so, are you open to sharing them?{" "}
+                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <textarea
+                          name="challengesDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required={formData["hasChallenges"] === "yes"}
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["challengesDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {role === "executive-assistant" && (
+                    <>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          1. Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="fullName"
+                          className={`w-full rounded-md border ${
+                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["fullName"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          2. Gender <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="gender"
+                          className={`w-full rounded-md border ${
+                            formErrors["gender"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["gender"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          3. Telegram phone number/ username <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="telegram"
+                          className={`w-full rounded-md border ${
+                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["telegram"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          4. Installation <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="installation"
+                          className={`w-full rounded-md border ${
+                            formErrors["installation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["installation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          5. Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="address"
+                          className={`w-full rounded-md border ${
+                            formErrors["address"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["address"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          6. Single or married? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="maritalStatus"
+                          className={`w-full rounded-md border ${
+                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["maritalStatus"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          7. Occupation <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="occupation"
+                          className={`w-full rounded-md border ${
+                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["occupation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          8. Leadership Position (how long) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="leadershipPosition"
+                          className={`w-full rounded-md border ${
+                            formErrors["leadershipPosition"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["leadershipPosition"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["leadershipPosition"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          9. Department <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="department"
+                          className={`w-full rounded-md border ${
+                            formErrors["department"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["department"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["department"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          10. Dues status <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="duesStatus"
+                          className={`w-full rounded-md border ${
+                            formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["duesStatus"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          11. How has this position influenced you? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="positionInfluence"
+                          className={`w-full rounded-md border ${
+                            formErrors["positionInfluence"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["positionInfluence"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["positionInfluence"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          12. What has changed in your life since you joined the church{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeChanges"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeChanges"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          13. Number of life class topics/ name of life class teacher/ what is your consistency in Life
+                          Class <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeClass"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeClass"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="bornAgain"
+                          className={`w-full rounded-md border ${
+                            formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["bornAgain"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          15. How many souls have you brought to the church this year{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="soulsWon"
+                          className={`w-full rounded-md border ${
+                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["soulsWon"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          16. How many life class students do you have? Mention three{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="lifeClassStudents"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["lifeClassStudents"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          17. Who is your mentor/ what is your consistency in Mentoring{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="mentorConsistency"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["mentorConsistency"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorConsistency"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          18. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="wordSanctuaryMeaning"
+                          className={`w-full rounded-md border ${
+                            formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["wordSanctuaryMeaning"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["wordSanctuaryMeaning"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          19. What is your future in Word Sanctuary <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="futureInWordSanctuary"
+                          className={`w-full rounded-md border ${
+                            formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["futureInWordSanctuary"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["futureInWordSanctuary"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          20. Are you in a relationship? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="inRelationship"
+                          className={`w-full rounded-md border ${
+                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["inRelationship"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          21. With who/how long{" "}
+                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <input
+                          type="text"
+                          name="relationshipDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required={formData["inRelationship"] === "yes"}
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["relationshipDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          22. When did you join the church <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="joinDate"
+                          className={`w-full rounded-md border ${
+                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["joinDate"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          23. Are you ready for this training? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="readyForTraining"
+                          className={`w-full rounded-md border ${
+                            formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["readyForTraining"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["readyForTraining"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          24. How has the executives&apos; Forum being a blessing to your installation?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="forumBlessing"
+                          className={`w-full rounded-md border ${
+                            formErrors["forumBlessing"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["forumBlessing"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumBlessing"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          25. Observations on things to improve in your: <span className="text-red-500">*</span>
+                        </label>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          1. Department <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="departmentImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none mb-2`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["departmentImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["departmentImprovements"]}
+                          </p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          2. Forum <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="forumImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["forumImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none mb-2`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["forumImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumImprovements"]}</p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          3. Church <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="churchImprovements"
+                          className={`w-full rounded-md border ${
+                            formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={2}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["churchImprovements"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["churchImprovements"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          26. How can you be of help to move your department/installation forward?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="helpMovingForward"
+                          className={`w-full rounded-md border ${
+                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["helpMovingForward"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          27. Do you have any challenges you are facing presently?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="hasChallenges"
+                          className={`mb-3 w-full rounded-md border ${
+                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["hasChallenges"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          If so, are you open to sharing them?{" "}
+                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <textarea
+                          name="challengesDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required={formData["hasChallenges"] === "yes"}
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["challengesDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {/* Minister specific form fields */}
+                  {role === "minister" && (
+                    <>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          1. Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="fullName"
+                          className={`w-full rounded-md border ${
+                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["fullName"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          2. Date of birth <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="date"
+                          name="dateOfBirth"
+                          className={`w-full rounded-md border ${
+                            formErrors["dateOfBirth"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["dateOfBirth"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["dateOfBirth"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          3. Telegram phone number/username <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="telegram"
+                          className={`w-full rounded-md border ${
+                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["telegram"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          4. State of Origin <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="stateOfOrigin"
+                          className={`w-full rounded-md border ${
+                            formErrors["stateOfOrigin"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["stateOfOrigin"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["stateOfOrigin"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          5. Single or married? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="maritalStatus"
+                          className={`w-full rounded-md border ${
+                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["maritalStatus"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          6. Highest academic qualification? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="highestQualification"
+                          className={`w-full rounded-md border ${
+                            formErrors["highestQualification"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["highestQualification"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["highestQualification"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          7. When did you join Word Sanctuary? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="joinDate"
+                          className={`w-full rounded-md border ${
+                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["joinDate"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          8. What month and year did you become minister? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="ministerDate"
+                          className={`w-full rounded-md border ${
+                            formErrors["ministerDate"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["ministerDate"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["ministerDate"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          9. How many departments have you administered? Mention the departments and corresponding
+                          installation <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="departmentsAdministered"
+                          className={`w-full rounded-md border ${
+                            formErrors["departmentsAdministered"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["departmentsAdministered"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["departmentsAdministered"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          10. Mention the Centrals you have headed previously, if any{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="centralsHeaded"
+                          className={`w-full rounded-md border ${
+                            formErrors["centralsHeaded"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["centralsHeaded"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["centralsHeaded"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          11. List the centrals you've assisted in <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="centralsAssisted"
+                          className={`w-full rounded-md border ${
+                            formErrors["centralsAssisted"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["centralsAssisted"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["centralsAssisted"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          12. How well are the departments under you functioning presently in terms of number and
+                          finances? Mention specifics <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="departmentsFunctioning"
+                          className={`w-full rounded-md border ${
+                            formErrors["departmentsFunctioning"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["departmentsFunctioning"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["departmentsFunctioning"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          13. Have you started an installation before? Mention the name(s){" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="installationsStarted"
+                          className={`w-full rounded-md border ${
+                            formErrors["installationsStarted"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["installationsStarted"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["installationsStarted"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          14. Have you headed installations before? How many and mention them{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="installationsHeaded"
+                          className={`w-full rounded-md border ${
+                            formErrors["installationsHeaded"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["installationsHeaded"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installationsHeaded"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          15. What creativity did you bring to the installation? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="creativityBrought"
+                          className={`w-full rounded-md border ${
+                            formErrors["creativityBrought"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["creativityBrought"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["creativityBrought"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          16. How did you meet the installation (amount of money and number of people) and how did you
+                          leave it? <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="installationMetAndLeft"
+                          className={`w-full rounded-md border ${
+                            formErrors["installationMetAndLeft"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["installationMetAndLeft"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["installationMetAndLeft"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          17. Which installation are you serving presently? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="currentInstallation"
+                          className={`w-full rounded-md border ${
+                            formErrors["currentInstallation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["currentInstallation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["currentInstallation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          18. Who is your mentor? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="mentor"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentor"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["mentor"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentor"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          19. How many topics have you taken in your mentoring class?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="mentoringTopics"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentoringTopics"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["mentoringTopics"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentoringTopics"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          20. How many life class students do you have? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="lifeClassStudents"
+                          className={`w-full rounded-md border ${
+                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["lifeClassStudents"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          21. How many mentees do you have? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="mentees"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentees"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["mentees"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentees"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          22. How much are you owing in minister's forum due? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="forumDuesOwing"
+                          className={`w-full rounded-md border ${
+                            formErrors["forumDuesOwing"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["forumDuesOwing"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumDuesOwing"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          23. Are you a student or worker? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="occupation"
+                          className={`w-full rounded-md border ${
+                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["occupation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          24. Where / what work do you do <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="workPlace"
+                          className={`w-full rounded-md border ${
+                            formErrors["workPlace"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["workPlace"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["workPlace"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          25. How much have you given this year? <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="amountGiven"
+                          className={`w-full rounded-md border ${
+                            formErrors["amountGiven"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["amountGiven"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["amountGiven"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          26. How many souls have you brought to church this year?{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="soulsWon"
+                          className={`w-full rounded-md border ${
+                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["soulsWon"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          27. Are you in a relationship? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="inRelationship"
+                          className={`w-full rounded-md border ${
+                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["inRelationship"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          28. With who and for how long{" "}
+                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <input
+                          type="text"
+                          name="relationshipDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required={formData["inRelationship"] === "yes"}
+                          onChange={handleInputChange}
+                        />
+                        {formErrors["relationshipDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          29. Is your mentor/head of installation aware{" "}
+                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <select
+                          name="mentorAware"
+                          className={`w-full rounded-md border ${
+                            formErrors["mentorAware"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required={formData["inRelationship"] === "yes"}
+                          onChange={handleInputChange}
+                          disabled={formData["inRelationship"] !== "yes"}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["mentorAware"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorAware"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          30. Observations on things to be improved in your installation, central and the system{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="improvementObservations"
+                          className={`w-full rounded-md border ${
+                            formErrors["improvementObservations"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["improvementObservations"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["improvementObservations"]}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          31. How can you be of help to move the system/ your installation to the next Level{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="helpMovingForward"
+                          className={`w-full rounded-md border ${
+                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["helpMovingForward"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          32. Is there anything we can do to move your installation to the next level{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="installationHelp"
+                          className={`w-full rounded-md border ${
+                            formErrors["installationHelp"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["installationHelp"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installationHelp"]}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          33. Do you have any challenges? <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="hasChallenges"
+                          className={`mb-3 w-full rounded-md border ${
+                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          required
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select an option</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formErrors["hasChallenges"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
+                        )}
+
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          If so, are you open to sharing them?{" "}
+                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
+                        </label>
+                        <textarea
+                          name="challengesDetails"
+                          className={`w-full rounded-md border ${
+                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
+                          } p-2 ${focusColor} focus:outline-none`}
+                          rows={3}
+                          required={formData["hasChallenges"] === "yes"}
+                          onChange={handleInputChange}
+                        ></textarea>
+                        {formErrors["challengesDetails"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
+                        )}
+                      </div>
+                    </>
+                  )}
 
                   {/* HOD specific form fields */}
                   {role === "hod" && (
@@ -1518,36 +3319,38 @@ export default function InterviewQuestions() {
                           <span className="text-red-500">*</span>
                         </label>
                         <textarea
-                          name="helpMovingForward"
+                          name="helpMovingInstallation"
                           className={`w-full rounded-md border ${
-                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
+                            formErrors["helpMovingInstallation"] ? "border-red-500" : "border-gray-300"
                           } p-2 ${focusColor} focus:outline-none`}
                           rows={3}
                           required
                           onChange={handleInputChange}
                         ></textarea>
-                        {formErrors["helpMovingForward"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
+                        {formErrors["helpMovingInstallation"] && (
+                          <p className="mt-1 text-xs text-red-500 error-message">
+                            {formErrors["helpMovingInstallation"]}
+                          </p>
                         )}
                       </div>
 
                       <div>
                         <label className="mb-1 block text-sm font-medium text-gray-700">
-                          33. What innovation/creativity have you added to your department{" "}
+                          33. What innovation/ creativity have you added to your department{" "}
                           <span className="text-red-500">*</span>
                         </label>
                         <textarea
-                          name="departmentInnovation"
+                          name="innovationCreativity"
                           className={`w-full rounded-md border ${
-                            formErrors["departmentInnovation"] ? "border-red-500" : "border-gray-300"
+                            formErrors["innovationCreativity"] ? "border-red-500" : "border-gray-300"
                           } p-2 ${focusColor} focus:outline-none`}
                           rows={3}
                           required
                           onChange={handleInputChange}
                         ></textarea>
-                        {formErrors["departmentInnovation"] && (
+                        {formErrors["innovationCreativity"] && (
                           <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["departmentInnovation"]}
+                            {formErrors["innovationCreativity"]}
                           </p>
                         )}
                       </div>
@@ -1593,1791 +3396,6 @@ export default function InterviewQuestions() {
 
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                           If so, are you open to share them?{" "}
-                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <textarea
-                          name="challengesDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required={formData["hasChallenges"] === "yes"}
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["challengesDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
-                        )}
-                      </div>
-                    </>
-                  )}
-
-                  {role === "minister" && (
-                    <>
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          1. Name <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          className={`w-full rounded-md border ${
-                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["fullName"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          2. Date of birth <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="date"
-                          name="dateOfBirth"
-                          className={`w-full rounded-md border ${
-                            formErrors["dateOfBirth"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["dateOfBirth"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["dateOfBirth"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          3. Telegram phone number/username <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="telegram"
-                          className={`w-full rounded-md border ${
-                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["telegram"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          4. State of origin <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="stateOfOrigin"
-                          className={`w-full rounded-md border ${
-                            formErrors["stateOfOrigin"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["stateOfOrigin"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["stateOfOrigin"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          5. Single or married? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="maritalStatus"
-                          className={`w-full rounded-md border ${
-                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["maritalStatus"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          6. Highest academic qualification <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="highestQualification"
-                          className={`w-full rounded-md border ${
-                            formErrors["highestQualification"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["highestQualification"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["highestQualification"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          7. When did you join Word Sanctuary? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="joinDate"
-                          className={`w-full rounded-md border ${
-                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["joinDate"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          8. What month and year did you become minister? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="ministerDate"
-                          className={`w-full rounded-md border ${
-                            formErrors["ministerDate"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["ministerDate"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["ministerDate"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          9. How many departments have you administered? Mention the departments and corresponding
-                          installation <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="departmentsAdministered"
-                          className={`w-full rounded-md border ${
-                            formErrors["departmentsAdministered"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["departmentsAdministered"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["departmentsAdministered"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          10. Mention the Centrals you have headed previously, if any{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="centralsHeaded"
-                          className={`w-full rounded-md border ${
-                            formErrors["centralsHeaded"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["centralsHeaded"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["centralsHeaded"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          11. List the centrals you've assisted in <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="centralsAssisted"
-                          className={`w-full rounded-md border ${
-                            formErrors["centralsAssisted"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["centralsAssisted"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["centralsAssisted"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          12. How well are the departments under you functioning presently in terms of number and
-                          finances? Mention specifics <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="departmentsFunctioning"
-                          className={`w-full rounded-md border ${
-                            formErrors["departmentsFunctioning"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["departmentsFunctioning"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["departmentsFunctioning"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          13. Have you started an installation before? Mention the name(s){" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="installationsStarted"
-                          className={`w-full rounded-md border ${
-                            formErrors["installationsStarted"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["installationsStarted"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["installationsStarted"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          14. Have you headed installations before? How many and mention them{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="installationsHeaded"
-                          className={`w-full rounded-md border ${
-                            formErrors["installationsHeaded"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["installationsHeaded"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installationsHeaded"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          15. What creativity did you bring to the installation? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="installationCreativity"
-                          className={`w-full rounded-md border ${
-                            formErrors["installationCreativity"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["installationCreativity"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["installationCreativity"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          16. How did you meet the installation (amount of money and number of people) and how did you
-                          leave it? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="installationProgress"
-                          className={`w-full rounded-md border ${
-                            formErrors["installationProgress"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["installationProgress"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["installationProgress"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          17. Which installation are you serving presently? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="currentInstallation"
-                          className={`w-full rounded-md border ${
-                            formErrors["currentInstallation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["currentInstallation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["currentInstallation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          18. Who is your mentor? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="mentor"
-                          className={`w-full rounded-md border ${
-                            formErrors["mentor"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["mentor"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentor"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          19. How many topics have you taken in your mentoring class?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="mentoringTopics"
-                          className={`w-full rounded-md border ${
-                            formErrors["mentoringTopics"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["mentoringTopics"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentoringTopics"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          20. How many life class students do you have? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="lifeClassStudents"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["lifeClassStudents"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          21. How many mentees do you have? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="menteesCount"
-                          className={`w-full rounded-md border ${
-                            formErrors["menteesCount"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["menteesCount"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["menteesCount"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          22. How much are you owing in minister's forum due? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="duesOwing"
-                          className={`w-full rounded-md border ${
-                            formErrors["duesOwing"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["duesOwing"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesOwing"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          23. Are you a student or worker? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="occupation"
-                          className={`w-full rounded-md border ${
-                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["occupation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          24. Where / what work do you do <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="workPlace"
-                          className={`w-full rounded-md border ${
-                            formErrors["workPlace"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["workPlace"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["workPlace"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          25. How much have you given this year? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="amountGiven"
-                          className={`w-full rounded-md border ${
-                            formErrors["amountGiven"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["amountGiven"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["amountGiven"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          26. How many souls have you brought to church this year?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="soulsWon"
-                          className={`w-full rounded-md border ${
-                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["soulsWon"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          27. Are you in a relationship? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="inRelationship"
-                          className={`w-full rounded-md border ${
-                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["inRelationship"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          28. With who and for how long{" "}
-                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <input
-                          type="text"
-                          name="relationshipDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required={formData["inRelationship"] === "yes"}
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["relationshipDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          29. Is your mentor/head of installation aware{" "}
-                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <select
-                          name="mentorAware"
-                          className={`w-full rounded-md border ${
-                            formErrors["mentorAware"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required={formData["inRelationship"] === "yes"}
-                          onChange={handleInputChange}
-                          disabled={formData["inRelationship"] !== "yes"}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["mentorAware"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorAware"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          30. Observations on things to be improved in your installation, central and the system{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="improvementObservations"
-                          className={`w-full rounded-md border ${
-                            formErrors["improvementObservations"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["improvementObservations"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["improvementObservations"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          31. How can you be of help to move the system/ your installation to the next Level{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="helpMovingForward"
-                          className={`w-full rounded-md border ${
-                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["helpMovingForward"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          32. Is there anything we can do to move your installation to the next level{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="installationHelp"
-                          className={`w-full rounded-md border ${
-                            formErrors["installationHelp"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["installationHelp"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installationHelp"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          33. Do you have any challenges? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="hasChallenges"
-                          className={`mb-3 w-full rounded-md border ${
-                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["hasChallenges"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          If so, are you open to share them?{" "}
-                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <textarea
-                          name="challengesDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required={formData["hasChallenges"] === "yes"}
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["challengesDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
-                        )}
-                      </div>
-                    </>
-                  )}
-
-                  {role === "assistant-hod" && (
-                    <>
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          1. Full Name <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          className={`w-full rounded-md border ${
-                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["fullName"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          2. Gender <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="gender"
-                          className={`w-full rounded-md border ${
-                            formErrors["gender"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["gender"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          3. Telegram phone number/ username <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="telegram"
-                          className={`w-full rounded-md border ${
-                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["telegram"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          4. Installation <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="installation"
-                          className={`w-full rounded-md border ${
-                            formErrors["installation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["installation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          5. Address <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="address"
-                          className={`w-full rounded-md border ${
-                            formErrors["address"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["address"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          6. Single or married? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="maritalStatus"
-                          className={`w-full rounded-md border ${
-                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["maritalStatus"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          7. Occupation <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="occupation"
-                          className={`w-full rounded-md border ${
-                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["occupation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          8. Leadership Position (how long) <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="leadershipPosition"
-                          className={`w-full rounded-md border ${
-                            formErrors["leadershipPosition"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["leadershipPosition"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["leadershipPosition"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          9. Department (with previous departments) <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="departmentHistory"
-                          className={`w-full rounded-md border ${
-                            formErrors["departmentHistory"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["departmentHistory"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["departmentHistory"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          10. Dues status <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="duesStatus"
-                          className={`w-full rounded-md border ${
-                            formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["duesStatus"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          11. How has this position influenced you? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="positionInfluence"
-                          className={`w-full rounded-md border ${
-                            formErrors["positionInfluence"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["positionInfluence"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["positionInfluence"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          12. What has changed in your life since you joined the church{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeChanges"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeChanges"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          13. Number of life class topics/ name of life class teacher/ what is your consistency in Life
-                          Class <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeClass"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeClass"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="bornAgain"
-                          className={`w-full rounded-md border ${
-                            formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["bornAgain"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          15. How many souls have you brought to the church this year{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="soulsWon"
-                          className={`w-full rounded-md border ${
-                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["soulsWon"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          16. How many life class students do you have? Mention three{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeClassStudents"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeClassStudents"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          17. Who is your mentor/ what is your consistency in Mentoring{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="mentorConsistency"
-                          className={`w-full rounded-md border ${
-                            formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["mentorConsistency"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorConsistency"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          18. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="wordSanctuaryMeaning"
-                          className={`w-full rounded-md border ${
-                            formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["wordSanctuaryMeaning"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["wordSanctuaryMeaning"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          19. What is your future in Word Sanctuary <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="futureInWordSanctuary"
-                          className={`w-full rounded-md border ${
-                            formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["futureInWordSanctuary"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["futureInWordSanctuary"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          20. Are you in a relationship? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="inRelationship"
-                          className={`w-full rounded-md border ${
-                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["inRelationship"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          21. With who/how long{" "}
-                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <input
-                          type="text"
-                          name="relationshipDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required={formData["inRelationship"] === "yes"}
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["relationshipDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          22. When did you join the church <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="joinDate"
-                          className={`w-full rounded-md border ${
-                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["joinDate"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          23. Are you ready for this training? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="readyForTraining"
-                          className={`w-full rounded-md border ${
-                            formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["readyForTraining"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["readyForTraining"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          24. How has the Assistant HODs Forum been a blessing to your installation?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="forumBlessing"
-                          className={`w-full rounded-md border ${
-                            formErrors["forumBlessing"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["forumBlessing"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumBlessing"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          25. Observations on things to improve in your: <span className="text-red-500">*</span>
-                        </label>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          1. Department <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="departmentImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none mb-2`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["departmentImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["departmentImprovements"]}
-                          </p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          2. Forum <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="forumImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["forumImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none mb-2`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["forumImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumImprovements"]}</p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          3. Church <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="churchImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["churchImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["churchImprovements"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          26. How can you be of help to move your department/installation forward?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="helpMovingForward"
-                          className={`w-full rounded-md border ${
-                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["helpMovingForward"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          27. Do you have any challenges you are facing presently?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="hasChallenges"
-                          className={`mb-3 w-full rounded-md border ${
-                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["hasChallenges"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          If so, are you open to sharing them?{" "}
-                          {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <textarea
-                          name="challengesDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["challengesDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required={formData["hasChallenges"] === "yes"}
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["challengesDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["challengesDetails"]}</p>
-                        )}
-                      </div>
-                    </>
-                  )}
-
-                  {/* Executive Assistant specific form fields */}
-                  {role === "executive-assistant" && (
-                    <>
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          1. Full Name <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          className={`w-full rounded-md border ${
-                            formErrors["fullName"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["fullName"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["fullName"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          2. Gender <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="gender"
-                          className={`w-full rounded-md border ${
-                            formErrors["gender"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["gender"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["gender"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          3. Telegram phone number/ username <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="telegram"
-                          className={`w-full rounded-md border ${
-                            formErrors["telegram"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["telegram"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["telegram"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          4. Installation <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="installation"
-                          className={`w-full rounded-md border ${
-                            formErrors["installation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["installation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["installation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          5. Address <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="address"
-                          className={`w-full rounded-md border ${
-                            formErrors["address"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["address"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["address"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          6. Single or married? <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="maritalStatus"
-                          className={`w-full rounded-md border ${
-                            formErrors["maritalStatus"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["maritalStatus"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["maritalStatus"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          7. Occupation <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="occupation"
-                          className={`w-full rounded-md border ${
-                            formErrors["occupation"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["occupation"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["occupation"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          8. Leadership Position (how long) <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="leadershipPosition"
-                          className={`w-full rounded-md border ${
-                            formErrors["leadershipPosition"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["leadershipPosition"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["leadershipPosition"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          9. Department <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="department"
-                          className={`w-full rounded-md border ${
-                            formErrors["department"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["department"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["department"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          10. Dues status <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="duesStatus"
-                          className={`w-full rounded-md border ${
-                            formErrors["duesStatus"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["duesStatus"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["duesStatus"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          11. How has this position influenced you? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="positionInfluence"
-                          className={`w-full rounded-md border ${
-                            formErrors["positionInfluence"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["positionInfluence"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["positionInfluence"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          12. What has changed in your life since you joined the church{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeChanges"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeChanges"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeChanges"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeChanges"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          13. Number of life class topics/ name of life class teacher/ what is your consistency in Life
-                          Class <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeClass"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeClass"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeClass"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClass"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          14. Are you born again? If yes, when and where? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="bornAgain"
-                          className={`w-full rounded-md border ${
-                            formErrors["bornAgain"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["bornAgain"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["bornAgain"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          15. How many souls have you brought to the church this year{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="soulsWon"
-                          className={`w-full rounded-md border ${
-                            formErrors["soulsWon"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["soulsWon"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["soulsWon"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          16. How many life class students do you have? Mention three{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="lifeClassStudents"
-                          className={`w-full rounded-md border ${
-                            formErrors["lifeClassStudents"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["lifeClassStudents"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["lifeClassStudents"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          17. Who is your mentor/ what is your consistency in Mentoring{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="mentorConsistency"
-                          className={`w-full rounded-md border ${
-                            formErrors["mentorConsistency"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["mentorConsistency"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["mentorConsistency"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          18. What does Word Sanctuary mean to you <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="wordSanctuaryMeaning"
-                          className={`w-full rounded-md border ${
-                            formErrors["wordSanctuaryMeaning"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["wordSanctuaryMeaning"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["wordSanctuaryMeaning"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          19. What is your future in Word Sanctuary <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="futureInWordSanctuary"
-                          className={`w-full rounded-md border ${
-                            formErrors["futureInWordSanctuary"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["futureInWordSanctuary"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["futureInWordSanctuary"]}
-                          </p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          20. Are you in a relationship? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="inRelationship"
-                          className={`w-full rounded-md border ${
-                            formErrors["inRelationship"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["inRelationship"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["inRelationship"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          21. With who/how long{" "}
-                          {formData["inRelationship"] === "yes" && <span className="text-red-500">*</span>}
-                        </label>
-                        <input
-                          type="text"
-                          name="relationshipDetails"
-                          className={`w-full rounded-md border ${
-                            formErrors["relationshipDetails"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required={formData["inRelationship"] === "yes"}
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["relationshipDetails"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["relationshipDetails"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          22. When did you join the church <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="joinDate"
-                          className={`w-full rounded-md border ${
-                            formErrors["joinDate"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        />
-                        {formErrors["joinDate"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["joinDate"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          23. Are you ready for this training? <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="readyForTraining"
-                          className={`w-full rounded-md border ${
-                            formErrors["readyForTraining"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["readyForTraining"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["readyForTraining"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          24. How has the executives&apos; Forum being a blessing to your installation?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="forumBlessing"
-                          className={`w-full rounded-md border ${
-                            formErrors["forumBlessing"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["forumBlessing"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumBlessing"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          25. Observations on things to improve in your: <span className="text-red-500">*</span>
-                        </label>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          1. Department <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="departmentImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["departmentImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none mb-2`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["departmentImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">
-                            {formErrors["departmentImprovements"]}
-                          </p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          2. Forum <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="forumImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["forumImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none mb-2`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["forumImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["forumImprovements"]}</p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          3. Church <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="churchImprovements"
-                          className={`w-full rounded-md border ${
-                            formErrors["churchImprovements"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={2}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["churchImprovements"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["churchImprovements"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          26. How can you be of help to move your department/installation forward?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          name="helpMovingForward"
-                          className={`w-full rounded-md border ${
-                            formErrors["helpMovingForward"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          rows={3}
-                          required
-                          onChange={handleInputChange}
-                        ></textarea>
-                        {formErrors["helpMovingForward"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["helpMovingForward"]}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          27. Do you have any challenges you are facing presently?{" "}
-                          <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="hasChallenges"
-                          className={`mb-3 w-full rounded-md border ${
-                            formErrors["hasChallenges"] ? "border-red-500" : "border-gray-300"
-                          } p-2 ${focusColor} focus:outline-none`}
-                          required
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select an option</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                        {formErrors["hasChallenges"] && (
-                          <p className="mt-1 text-xs text-red-500 error-message">{formErrors["hasChallenges"]}</p>
-                        )}
-
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                          If so, are you open to sharing them?{" "}
                           {formData["hasChallenges"] === "yes" && <span className="text-red-500">*</span>}
                         </label>
                         <textarea
