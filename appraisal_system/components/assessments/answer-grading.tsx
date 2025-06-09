@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import Image from "next/image"
+import { AnswerGradingForm } from "./answer-grading-form"
 
 interface Trainee {
   id: string
@@ -30,6 +31,24 @@ export function AnswerGrading({ assessmentTitle, onBack }: AnswerGradingProps) {
     { id: "8", name: "Word Sanctuary", trainingType: "Executive Asst", installation: "ABUJA" },
     { id: "9", name: "Word Sanctuary", trainingType: "Executive Asst", installation: "Gospel Empire" },
   ])
+
+  const [selectedTrainee, setSelectedTrainee] = useState<string | null>(null)
+  const [selectedAssessment, setSelectedAssessment] = useState<string | null>(null)
+
+  const handleGradeAnswer = (traineeId: string) => {
+    setSelectedTrainee(traineeId)
+    setSelectedAssessment(assessmentTitle)
+  }
+
+  const handleBackToList = () => {
+    setSelectedTrainee(null)
+    setSelectedAssessment(null)
+  }
+
+  // If a trainee is selected, show the grading form
+  if (selectedTrainee && selectedAssessment) {
+    return <AnswerGradingForm traineeId={selectedTrainee} assessmentId={selectedAssessment} onBack={handleBackToList} />
+  }
 
   return (
     <div className="w-full">
@@ -100,7 +119,12 @@ export function AnswerGrading({ assessmentTitle, onBack }: AnswerGradingProps) {
             <div>{trainee.installation}</div>
             <div></div>
             <div className="flex gap-2">
-              <Button className="bg-black hover:bg-gray-800 text-white text-xs py-1 px-3 rounded">Answer</Button>
+              <Button
+                className="bg-black hover:bg-gray-800 text-white text-xs py-1 px-3 rounded"
+                onClick={() => handleGradeAnswer(trainee.id)}
+              >
+                Answer
+              </Button>
               <Button className="bg-purple-600 hover:bg-purple-700 text-white text-xs py-1 px-3 rounded">Reset</Button>
               <Button className="bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-3 rounded">Score</Button>
             </div>
