@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,16 +12,43 @@ import { useToast } from "@/components/ui/use-toast"
 interface HOIFormProps {
   traineeName?: string
   onClose: () => void
+  mode?: "create" | "view" | "edit"
+  formId?: string
 }
 
-export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProps) {
-  const [recommendation, setRecommendation] = useState("")
-  const [characterComment, setCharacterComment] = useState("")
-  const [attendanceComment, setAttendanceComment] = useState("")
-  const [duesComment, setDuesComment] = useState("")
-  const [accuracyComment, setAccuracyComment] = useState("")
+interface FormData {
+  recommendation: string
+  characterComment: string
+  attendanceComment: string
+  duesComment: string
+  accuracyComment: string
+}
+
+export function HOIForm({ traineeName = "Word Sanctuary", onClose, mode = "create", formId }: HOIFormProps) {
+  const [formData, setFormData] = useState<FormData>({
+    recommendation: "",
+    characterComment: "",
+    attendanceComment: "",
+    duesComment: "",
+    accuracyComment: "",
+  })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isViewMode, setIsViewMode] = useState(mode === "view")
   const { toast } = useToast()
+
+  // Load existing form data if editing or viewing
+  useEffect(() => {
+    if ((mode === "edit" || mode === "view") && formId && typeof window !== "undefined") {
+      const savedData = localStorage.getItem(`hoi_form_${formId}`)
+      if (savedData) {
+        setFormData(JSON.parse(savedData))
+      }
+    }
+  }, [mode, formId])
+
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,6 +57,28 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Save form data and completion status
+      if (typeof window !== "undefined") {
+        const submissionId = formId || `${traineeName}_${Date.now()}`
+        const submissionData = {
+          ...formData,
+          traineeName,
+          submittedAt: new Date().toISOString(),
+          submittedBy: localStorage.getItem("userRole") || "user",
+          type: "hoi",
+        }
+
+        localStorage.setItem(`hoi_form_${submissionId}`, JSON.stringify(submissionData))
+        localStorage.setItem(
+          `hoi_status_${submissionId}`,
+          JSON.stringify({
+            status: "completed",
+            completedAt: new Date().toISOString(),
+            lastModified: new Date().toISOString(),
+          }),
+        )
+      }
 
       toast({
         title: "Appraisal submitted",
@@ -48,6 +97,10 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
     }
   }
 
+  const toggleEditMode = () => {
+    setIsViewMode(!isViewMode)
+  }
+
   return (
     <div className="bg-white rounded-lg p-6 max-w-md mx-auto">
       <div className="flex justify-center mb-4">
@@ -60,7 +113,15 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
         />
       </div>
 
-      <h2 className="text-2xl font-bold text-center mb-6">Head of Installation Appraisal Form</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Head of Installation Appraisal Form</h2>
+        {mode !== "create" && (
+          <Button type="button" variant="outline" size="sm" onClick={toggleEditMode}>
+            {isViewMode ? "Edit" : "View"}
+          </Button>
+        )}
+      </div>
+
       <p className="text-sm text-center mb-6">
         Kindly select the appropriate Appraisal type to access the list and form
       </p>
@@ -79,9 +140,10 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
           </label>
           <Input
             id="recommendation"
-            value={recommendation}
-            onChange={(e) => setRecommendation(e.target.value)}
+            value={formData.recommendation}
+            onChange={(e) => handleInputChange("recommendation", e.target.value)}
             required
+            disabled={isViewMode}
           />
         </div>
 
@@ -91,10 +153,11 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
           </label>
           <Textarea
             id="character"
-            value={characterComment}
-            onChange={(e) => setCharacterComment(e.target.value)}
+            value={formData.characterComment}
+            onChange={(e) => handleInputChange("characterComment", e.target.value)}
             required
             rows={4}
+            disabled={isViewMode}
           />
         </div>
 
@@ -104,9 +167,10 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
           </label>
           <Input
             id="attendance"
-            value={attendanceComment}
-            onChange={(e) => setAttendanceComment(e.target.value)}
+            value={formData.attendanceComment}
+            onChange={(e) => handleInputChange("attendanceComment", e.target.value)}
             required
+            disabled={isViewMode}
           />
         </div>
 
@@ -114,7 +178,13 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
           <label htmlFor="dues" className="block text-sm font-medium text-gray-700 mb-1">
             Is he/she owing dues?
           </label>
-          <Input id="dues" value={duesComment} onChange={(e) => setDuesComment(e.target.value)} required />
+          <Input
+            id="dues"
+            value={formData.duesComment}
+            onChange={(e) => handleInputChange("duesComment", e.target.value)}
+            required
+            disabled={isViewMode}
+          />
         </div>
 
         <div>
@@ -123,16 +193,22 @@ export function HOIForm({ traineeName = "Word Sanctuary", onClose }: HOIFormProp
           </label>
           <Textarea
             id="accuracy"
-            value={accuracyComment}
-            onChange={(e) => setAccuracyComment(e.target.value)}
+            value={formData.accuracyComment}
+            onChange={(e) => handleInputChange("accuracyComment", e.target.value)}
             required
             rows={4}
+            disabled={isViewMode}
           />
         </div>
 
-        <div className="flex justify-center pt-4">
-          <Button type="submit" className="bg-black hover:bg-gray-800 text-white px-8" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit"}
+        <div className="flex justify-center pt-4 space-x-2">
+          {!isViewMode && (
+            <Button type="submit" className="bg-black hover:bg-gray-800 text-white px-8" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : mode === "edit" ? "Update" : "Submit"}
+            </Button>
+          )}
+          <Button type="button" variant="outline" onClick={onClose}>
+            {isViewMode ? "Close" : "Cancel"}
           </Button>
         </div>
       </form>

@@ -11,9 +11,18 @@ interface AppraisalFormDialogProps {
   onOpenChange: (open: boolean) => void
   formType: "mentor" | "hoi" | "central" | "department"
   traineeName?: string
+  mode?: "create" | "view" | "edit"
+  formId?: string
 }
 
-export function AppraisalFormDialog({ open, onOpenChange, formType, traineeName }: AppraisalFormDialogProps) {
+export function AppraisalFormDialog({
+  open,
+  onOpenChange,
+  formType,
+  traineeName,
+  mode = "create",
+  formId,
+}: AppraisalFormDialogProps) {
   const isMobile = useMobile()
 
   const handleClose = () => {
@@ -27,10 +36,16 @@ export function AppraisalFormDialog({ open, onOpenChange, formType, traineeName 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={dialogContentClass}>
-        {formType === "mentor" && <MentorForm traineeName={traineeName} onClose={handleClose} />}
-        {formType === "hoi" && <HOIForm traineeName={traineeName} onClose={handleClose} />}
-        {formType === "central" && <CentralForm traineeName={traineeName} onClose={handleClose} />}
-        {formType === "department" && <CentralForm traineeName={traineeName} onClose={handleClose} />}
+        {formType === "mentor" && (
+          <MentorForm traineeName={traineeName} onClose={handleClose} mode={mode} formId={formId} />
+        )}
+        {formType === "hoi" && <HOIForm traineeName={traineeName} onClose={handleClose} mode={mode} formId={formId} />}
+        {formType === "central" && (
+          <CentralForm traineeName={traineeName} onClose={handleClose} mode={mode} formId={formId} />
+        )}
+        {formType === "department" && (
+          <CentralForm traineeName={traineeName} onClose={handleClose} mode={mode} formId={formId} />
+        )}
       </DialogContent>
     </Dialog>
   )

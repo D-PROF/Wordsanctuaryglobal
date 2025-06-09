@@ -46,9 +46,32 @@ export function FilterDialog({ open, onOpenChange, filterOptions, onFilterChange
     onApplyFilters()
   }
 
+  const installations = [
+    "Offa Garage",
+    "Kwasu",
+    "Unilorin",
+    "Tanke",
+    "FUTA",
+    "Lagos",
+    "Global",
+    "FUOYE",
+    "COHS",
+    "Kwarapoly",
+    "Zaria",
+    "Ibadan",
+    "Abuja",
+    "Elizade",
+    "Gospel Empire",
+    "Unijos",
+    "Uniabuja",
+    "Unilag",
+    "Lekki",
+    "USA",
+  ]
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Filter Options</DialogTitle>
         </DialogHeader>
@@ -64,7 +87,9 @@ export function FilterDialog({ open, onOpenChange, filterOptions, onFilterChange
                     checked={localFilterOptions.trainingTypes.includes(type)}
                     onCheckedChange={() => handleFilterChange("trainingTypes", type)}
                   />
-                  <Label htmlFor={`training-${type}`}>{type}</Label>
+                  <Label htmlFor={`training-${type}`} className="text-xs">
+                    {type}
+                  </Label>
                 </div>
               ))}
             </div>
@@ -72,15 +97,17 @@ export function FilterDialog({ open, onOpenChange, filterOptions, onFilterChange
 
           <div className="space-y-2">
             <h3 className="text-sm font-medium">Installation</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {["FUTA", "UNILAG", "OAU", "UI"].map((installation) => (
+            <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+              {installations.map((installation) => (
                 <div key={installation} className="flex items-center space-x-2">
                   <Checkbox
                     id={`installation-${installation}`}
                     checked={localFilterOptions.installations.includes(installation)}
                     onCheckedChange={() => handleFilterChange("installations", installation)}
                   />
-                  <Label htmlFor={`installation-${installation}`}>{installation}</Label>
+                  <Label htmlFor={`installation-${installation}`} className="text-xs">
+                    {installation}
+                  </Label>
                 </div>
               ))}
             </div>

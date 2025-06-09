@@ -60,7 +60,7 @@ export function SearchFilterBar({ onSearch, onFilter }: SearchFilterBarProps) {
           <Input
             type="text"
             placeholder="Search"
-            value={searchQuery}
+            value={searchQuery || ""}
             onChange={handleSearch}
             className="pl-10 w-full rounded-full"
           />
@@ -96,7 +96,7 @@ export function SearchFilterBar({ onSearch, onFilter }: SearchFilterBarProps) {
         <Input
           type="text"
           placeholder="Search"
-          value={searchQuery}
+          value={searchQuery || ""}
           onChange={handleSearch}
           className="pl-10 w-64 rounded-full"
         />

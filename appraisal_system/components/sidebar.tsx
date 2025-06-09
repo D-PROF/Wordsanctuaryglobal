@@ -124,7 +124,7 @@ export function Sidebar({ userRole }: SidebarProps) {
         )}
       </div>
 
-      {userRole === "admin" && (
+      {userRole === "superadmin" && (
         <Link
           href="/trainees"
           className={cn(
@@ -150,16 +150,31 @@ export function Sidebar({ userRole }: SidebarProps) {
         </Link>
       )}
 
-      <Link
-        href="/assessments"
-        className={cn(
-          "flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100",
-          pathname === "/assessments" && "bg-indigo-50 text-indigo-600",
-        )}
-      >
-        <Star size={20} />
-        <span>Assessments</span>
-      </Link>
+      {userRole === "admin" && (
+        <Link
+          href="/trainees"
+          className={cn(
+            "flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100",
+            pathname === "/trainees" && "bg-indigo-50 text-indigo-600",
+          )}
+        >
+          <Users size={20} />
+          <span>Trainee List</span>
+        </Link>
+      )}
+
+      {userRole !== "leadership" && userRole !== "superadmin" && (
+        <Link
+          href="/assessments"
+          className={cn(
+            "flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100",
+            pathname === "/assessments" && "bg-indigo-50 text-indigo-600",
+          )}
+        >
+          <Star size={20} />
+          <span>Assessments</span>
+        </Link>
+      )}
 
       {userRole === "admin" && (
         <Link
