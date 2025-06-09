@@ -6,4 +6,4 @@ Demo test -https://trainingusertests.vercel.app/
 
 The second folder (appraisal_systen) contains the front end for the appraisal system
 
-Demo test: https://wordsanctuaryappraisals.vercel.app/login
+Demo test: https://appraisalsystems.vercel.app/
