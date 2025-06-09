@@ -13,6 +13,7 @@ import { FilterDialog } from "@/components/filter-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { FilterOptions } from "@/components/search-filter-bar"
 import { DashboardHeader } from "@/components/dashboard-header"
+import Link from "next/link"
 
 export default function SuperAdminDashboard() {
   const router = useRouter()
@@ -104,7 +105,7 @@ export default function SuperAdminDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Total Users</CardTitle>
@@ -116,19 +117,10 @@ export default function SuperAdminDashboard() {
 
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">Active Appraisals</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-4xl font-bold text-indigo-700">328</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Installations</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-4xl font-bold text-indigo-700">12</p>
+                <p className="text-4xl font-bold text-indigo-700">20</p>
               </CardContent>
             </Card>
           </div>
@@ -137,10 +129,12 @@ export default function SuperAdminDashboard() {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex items-center mb-4">
                 <Users className="mr-2 text-indigo-600" />
-                <h3 className="text-lg font-semibold">User Management</h3>
+                <h3 className="text-lg font-semibold">Trainee Management</h3>
               </div>
-              <p className="text-gray-500 mb-4">Manage all users across installations</p>
-              <Button className="w-full">View Users</Button>
+              <p className="text-gray-500 mb-4">Manage all trainees across installations</p>
+              <Link href="/trainees">
+                <Button className="w-full">View Trainee List</Button>
+              </Link>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow">
@@ -158,7 +152,9 @@ export default function SuperAdminDashboard() {
                 <h3 className="text-lg font-semibold">System Settings</h3>
               </div>
               <p className="text-gray-500 mb-4">Configure system-wide settings</p>
-              <Button className="w-full">System Settings</Button>
+              <Link href="/settings">
+                <Button className="w-full">System Settings</Button>
+              </Link>
             </div>
           </div>
         </main>

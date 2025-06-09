@@ -80,7 +80,7 @@ export default function AdminDashboard() {
           <div className="bg-indigo-500 text-white rounded-xl p-4 md:p-8 mb-6 md:mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-lg md:text-xl mb-2">Happy are you</p>
+                <p className="text-lg md:text-xl mb-2">Happy are you Sir</p>
                 <h2 className="text-2xl md:text-3xl font-bold">Welcome Admin</h2>
                 <p className="mt-2">Check progress report</p>
               </div>

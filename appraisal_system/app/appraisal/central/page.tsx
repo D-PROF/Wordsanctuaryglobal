@@ -5,31 +5,31 @@ import { AppraisalHeader } from "@/components/appraisal-header"
 import { AppraisalTable, type AppraisalItem } from "@/components/appraisal-table"
 import type { FilterOptions } from "@/components/search-filter-bar"
 
-// Sample data with random names
+// Sample data with new installations
 const centralAppraisalItems: AppraisalItem[] = [
   {
     id: "1",
     name: "Word Sanctuary",
     trainingType: "Executive Assistant",
-    installation: "FUTA",
+    installation: "Offa Garage",
   },
   {
     id: "2",
     name: "Word Sanctuary",
     trainingType: "Assistant HOD",
-    installation: "UNILAG",
+    installation: "Kwasu",
   },
   {
     id: "3",
     name: "Word Sanctuary",
     trainingType: "HOD",
-    installation: "OAU",
+    installation: "Unilorin",
   },
   {
     id: "4",
     name: "Word Sanctuary",
     trainingType: "Minister",
-    installation: "UI",
+    installation: "Tanke",
   },
   {
     id: "5",
@@ -41,13 +41,31 @@ const centralAppraisalItems: AppraisalItem[] = [
     id: "6",
     name: "Word Sanctuary",
     trainingType: "Assistant HOD",
-    installation: "UI",
+    installation: "Lagos",
   },
   {
     id: "7",
     name: "Word Sanctuary",
     trainingType: "Pastor",
-    installation: "OAU",
+    installation: "Global",
+  },
+  {
+    id: "8",
+    name: "Word Sanctuary",
+    trainingType: "Executive Assistant",
+    installation: "FUOYE",
+  },
+  {
+    id: "9",
+    name: "Word Sanctuary",
+    trainingType: "HOD",
+    installation: "COHS",
+  },
+  {
+    id: "10",
+    name: "Word Sanctuary",
+    trainingType: "Minister",
+    installation: "Kwarapoly",
   },
 ]
 

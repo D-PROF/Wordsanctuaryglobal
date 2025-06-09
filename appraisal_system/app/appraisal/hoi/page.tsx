@@ -5,49 +5,67 @@ import { AppraisalHeader } from "@/components/appraisal-header"
 import { AppraisalTable, type AppraisalItem } from "@/components/appraisal-table"
 import type { FilterOptions } from "@/components/search-filter-bar"
 
-// Sample data with random names
+// Sample data with new installations
 const hoiAppraisalItems: AppraisalItem[] = [
   {
     id: "1",
     name: "Word Sanctuary",
     trainingType: "Executive Assistant",
-    installation: "FUTA",
+    installation: "Zaria",
   },
   {
     id: "2",
     name: "Word Sanctuary",
     trainingType: "Assistant HOD",
-    installation: "UNILAG",
+    installation: "Ibadan",
   },
   {
     id: "3",
     name: "Word Sanctuary",
     trainingType: "HOD",
-    installation: "OAU",
+    installation: "Abuja",
   },
   {
     id: "4",
     name: "Word Sanctuary",
     trainingType: "Minister",
-    installation: "UI",
+    installation: "Elizade",
   },
   {
     id: "5",
     name: "Word Sanctuary",
     trainingType: "Pastor",
-    installation: "FUTA",
+    installation: "Gospel Empire",
   },
   {
     id: "6",
     name: "Word Sanctuary",
     trainingType: "Executive Assistant",
-    installation: "OAU",
+    installation: "Unijos",
   },
   {
     id: "7",
     name: "Word Sanctuary",
     trainingType: "Minister",
-    installation: "UNILAG",
+    installation: "Uniabuja",
+  },
+  {
+    id: "8",
+    name: "Word Sanctuary",
+    trainingType: "Assistant HOD",
+    installation: "Unilag",
+  },
+  {
+    id: "9",
+    name: "Word Sanctuary",
+    trainingType: "HOD",
+    installation: "Lekki",
+  },
+  {
+    id: "10",
+    name: "Word Sanctuary",
+    trainingType: "Pastor",
+    installation: "USA",
   },
 ]
 

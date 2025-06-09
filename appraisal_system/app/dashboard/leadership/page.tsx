@@ -90,7 +90,7 @@ export default function LeadershipDashboard() {
           <div className="bg-indigo-500 text-white rounded-xl p-8 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xl mb-2">Happy are you</p>
+                <p className="text-xl mb-2">Happy are you Sir</p>
                 <h2 className="text-3xl font-bold">Get Started with Appraisals</h2>
               </div>
               <Image
