@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { AssessmentInstructions } from "../../components/AssessmentInstructions"
 import { AssessmentQuestion } from "../../components/AssessmentQuestion"
+import { ObjectiveQuestion } from "../../components/ObjectiveQuestion"
 
 interface Assessment {
   id: string
@@ -67,6 +68,13 @@ export default function Assessment() {
             timeLimit: 1200,
             completed: false,
           },
+          {
+            id: "worker-life-class",
+            title: "LIFE CLASS",
+            question: "objective",
+            timeLimit: 600,
+            completed: false,
+          },
         ]
         break
       case "executive-assistant":
@@ -111,6 +119,13 @@ export default function Assessment() {
             title: "BAD ASSISTANT EXAM",
             question: "Comprehensive evaluation of assistant qualities and improvement strategies.",
             timeLimit: 1200,
+            completed: false,
+          },
+          {
+            id: "exec-assistant-life-class",
+            title: "LIFE CLASS",
+            question: "objective",
+            timeLimit: 600,
             completed: false,
           },
         ]
@@ -159,6 +174,13 @@ export default function Assessment() {
             timeLimit: 1200,
             completed: false,
           },
+          {
+            id: "assistant-hod-life-class",
+            title: "LIFE CLASS",
+            question: "objective",
+            timeLimit: 600,
+            completed: false,
+          },
         ]
         break
       case "hod":
@@ -203,6 +225,13 @@ export default function Assessment() {
             title: "BAD ASSISTANT EXAM",
             question: "Comprehensive evaluation of assistant qualities and improvement strategies.",
             timeLimit: 1200,
+            completed: false,
+          },
+          {
+            id: "hod-life-class",
+            title: "LIFE CLASS",
+            question: "objective",
+            timeLimit: 600,
             completed: false,
           },
         ]
@@ -251,6 +280,13 @@ export default function Assessment() {
             timeLimit: 1200,
             completed: false,
           },
+          {
+            id: "minister-life-class",
+            title: "LIFE CLASS",
+            question: "objective",
+            timeLimit: 600,
+            completed: false,
+          },
         ]
         break
       default:
@@ -289,7 +325,7 @@ export default function Assessment() {
     setCurrentView("question")
   }
 
-  const handleSubmitAssessment = (answer: string) => {
+  const handleSubmitAssessment = (answer: string | Record<number, string>) => {
     if (selectedAssessment) {
       const userRole = localStorage.getItem("userRole") || "worker"
 
@@ -330,6 +366,18 @@ export default function Assessment() {
   }
 
   if (currentView === "question" && selectedAssessment) {
+    // Check if this is an objective question (Life Class)
+    if (selectedAssessment.question === "objective") {
+      return (
+        <ObjectiveQuestion
+          title={selectedAssessment.title}
+          timeLimit={selectedAssessment.timeLimit}
+          onSubmit={handleSubmitAssessment}
+          onViolation={handleViolation}
+        />
+      )
+    }
+
     return (
       <AssessmentQuestion
         title={selectedAssessment.title}
